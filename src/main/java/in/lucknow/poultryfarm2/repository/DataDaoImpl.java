@@ -177,14 +177,24 @@ public class DataDaoImpl implements DataDao {
 			ps11.setString(2, id);
 			ResultSet rs11 = ps11.executeQuery();
 			if (rs11.next()) {
-				PreparedStatement ps1 = cn.prepareStatement("select okm,ckm from travelreg where id=?");
+				PreparedStatement ps1 = cn.prepareStatement(
+						"select okm,ckm,tkm,date1,date2,lat,lan,otime,lat1,lan1,ctime from travelreg where id=?");
 				ps1.setString(1, rs11.getString(1));
 
 				ResultSet rs1 = ps1.executeQuery();
 				if (rs1.next()) {
 					Map<String, Object> obj = new HashMap<>();
-					obj.put("Opening", rs1.getString(1));
-					obj.put("Closing", rs1.getString(2));
+					obj.put("Opening Km", rs1.getString(1));
+					obj.put("Closing Km", rs1.getString(2));
+					obj.put("Total Km", rs1.getString(3));
+					obj.put("Opening Date", rs1.getString(4));
+					obj.put("Closing Date", rs1.getString(5));
+					obj.put("Opening Lattitude", rs1.getString(6));
+					obj.put("Opening Longitude", rs1.getString(7));
+					obj.put("Opening Time", rs1.getString(8));
+					obj.put("Closing Lattitude", rs1.getString(9));
+					obj.put("Closing Longitude", rs1.getString(10));
+					obj.put("Closing Time", rs1.getString(11));
 					result.add(obj);
 
 				}
