@@ -21,4 +21,6 @@ public interface FarmerAlcService {
 
 	String saveTravel(SaveTravel saveTravel);
 
+	String updateTravel(SaveTravel saveTravel);
+
 }

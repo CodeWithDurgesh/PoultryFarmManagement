@@ -204,6 +204,49 @@ public class FarmerAlcServiceImpl implements FarmerAlcService {
 				saveTravel.setTkm(saveTravel.getCkm() - saveTravel.getOkm());
 			}
 
+			MultipartFile file = saveTravel.getTravelpicfile_open();
+
+			if (file != null && !file.isEmpty()) {
+
+				Path uploadDir = Paths.get(uploadPath);
+
+				if (!Files.exists(uploadDir)) {
+					Files.createDirectories(uploadDir);
+				}
+
+				System.out.println("Upload Directory ----------: " + uploadDir.toAbsolutePath());
+				String originalFileName = file.getOriginalFilename();
+
+				String extension = "";
+
+				if (originalFileName != null && originalFileName.contains(".")) {
+					extension = originalFileName.substring(originalFileName.lastIndexOf("."));
+				}
+				/////////// @@@@@@@@@@@@@START SERVER@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+				String fileName = System.currentTimeMillis() + extension;
+				Path destinationPath = uploadDir.resolve(fileName);
+				System.out.println("Saving File To---------->check----- : " + destinationPath.toAbsolutePath());
+				Files.copy(file.getInputStream(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
+				System.out.println("File Saved Successfully");
+				String imageUrl = baseUrl + "/" + fileName;
+				System.out.println("Image URL :>---------------check " + imageUrl);
+
+				/////////// @@@@@@@@@@@@@END SERVER@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+///////////@@@@@@@@@@@@@START LOCAL@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+//				String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+//
+//				uploadPath = "D:/MFARM_PICs/uploads/images/travel";
+//
+//				Path path = Paths.get(uploadPath, fileName);
+//
+//				Files.write(path, file.getBytes());
+//				String imageUrl = baseUrl + "/" + fileName;
+/////////// @@@@@@@@@@@@@END LOCAL@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+				// store only filename in DB
+				saveTravel.setTravelpic_open(imageUrl);
+			}
 			int rowsInserted = travelRepository.saveTravel(saveTravel);
 
 			if (rowsInserted > 0) {
@@ -214,6 +257,86 @@ public class FarmerAlcServiceImpl implements FarmerAlcService {
 			log.error("Error while saving travel data: {}", ex.getMessage(), ex);
 			return "FAIL";
 		}
+	}
+
+	@Override
+	public String updateTravel(SaveTravel saveTravel) {
+		try {
+			if (saveTravel.getId() == null || saveTravel.getUser() == null
+					|| saveTravel.getUser().equalsIgnoreCase("")) {
+				log.warn("updateTravel called without id/user");
+				return "FAIL";
+			}
+
+			if (saveTravel.getTkm() == null && saveTravel.getOkm() != null && saveTravel.getCkm() != null) {
+				saveTravel.setTkm(saveTravel.getCkm() - saveTravel.getOkm());
+			}
+
+			// Handle "open" trip image
+			String openImageUrl = saveImageIfPresent(saveTravel.getTravelpicfile_open());
+			if (openImageUrl != null) {
+				saveTravel.setTravelpic_open(openImageUrl);
+			} else {
+				saveTravel.setTravelpic_open(null); // don't overwrite existing value
+			}
+
+			// Handle "close" trip image
+			String closeImageUrl = saveImageIfPresent(saveTravel.getTravelpicfile_close());
+			if (closeImageUrl != null) {
+				saveTravel.setTravelpic_close(closeImageUrl);
+			} else {
+				saveTravel.setTravelpic_close(null); // don't overwrite existing value
+			}
+
+			int rowsUpdated = travelRepository.updateTravel(saveTravel);
+
+			if (rowsUpdated > 0) {
+				return "Update successfully";
+			}
+			// 0 rows => either id doesn't exist, or id+user combination doesn't match
+			return "FAIL";
+
+		} catch (Exception ex) {
+			log.error("Error while updating travel data: {}", ex.getMessage(), ex);
+			return "FAIL";
+		}
+	}
+
+	private String saveImageIfPresent(MultipartFile file) throws IOException {
+		if (file == null || file.isEmpty()) {
+			return null;
+		}
+
+		Path uploadDir = Paths.get(uploadPath);
+		if (!Files.exists(uploadDir)) {
+			Files.createDirectories(uploadDir);
+		}
+		System.out.println("Upload Directory ----------: " + uploadDir.toAbsolutePath());
+		String originalFileName = file.getOriginalFilename();
+
+		String extension = "";
+
+		if (originalFileName != null && originalFileName.contains(".")) {
+			extension = originalFileName.substring(originalFileName.lastIndexOf("."));
+		}
+		//// @@@@@@@@@@@START LOCAL@@@@@@@@@@@@@@@@@@@
+		// String fileName = System.currentTimeMillis() + "_" +
+		// file.getOriginalFilename();
+		// uploadPath = "D:/MFARM_PICs/uploads/images/travel";
+		// Path path = Paths.get(uploadPath, fileName);
+		// Files.write(path, file.getBytes());
+		/////////////////// @@@@@@@@@END LOCAL@@@@@@@@@@@@@@@@@@@@@@
+
+		/////////// @@@@@@@@@@@@@START SERVER@@@@@@@@@@@@@@@@@
+		String fileName = System.currentTimeMillis() + extension;
+		Path destinationPath = uploadDir.resolve(fileName);
+		System.out.println("Saving File To---------->check----- : " + destinationPath.toAbsolutePath());
+		Files.copy(file.getInputStream(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
+		System.out.println("File Updated Successfully");
+		System.out.println("Image URL :>---------------check " + baseUrl + "/" + fileName);
+
+		/////////// @@@@@@@@@@@@@END SERVER@@@@@@@@@@@@@@@@@@@@@
+		return baseUrl + "/" + fileName;
 	}
 
 }

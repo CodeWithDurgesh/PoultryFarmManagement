@@ -178,7 +178,7 @@ public class DataDaoImpl implements DataDao {
 			ResultSet rs11 = ps11.executeQuery();
 			if (rs11.next()) {
 				PreparedStatement ps1 = cn.prepareStatement(
-						"select okm,ckm,tkm,date1,date2,lat,lan,otime,lat1,lan1,ctime from travelreg where id=?");
+						"select okm,ckm,tkm,date1,date2,lat,lan,otime,lat1,lan1,ctime,travelpic_open,travelpic_close,id from travelreg where id=?");
 				ps1.setString(1, rs11.getString(1));
 
 				ResultSet rs1 = ps1.executeQuery();
@@ -195,6 +195,9 @@ public class DataDaoImpl implements DataDao {
 					obj.put("Closing Lattitude", rs1.getString(9));
 					obj.put("Closing Longitude", rs1.getString(10));
 					obj.put("Closing Time", rs1.getString(11));
+					obj.put("Opening Photo", rs1.getString(12));
+					obj.put("Closing Photo", rs1.getString(13));
+					obj.put("Travel ID", rs1.getString(14));
 					result.add(obj);
 
 				}

@@ -381,4 +381,17 @@ public class BatchAllocationController {
 		return null;
 	}
 
+	@PutMapping("/update-travel")
+	public ResponseEntity<ApiResponse<List<String>>> updateTravel(@ModelAttribute SaveTravel saveTravel) {
+		List<String> messageSuccess = new ArrayList<>();
+		String message = farmerAlcService.updateTravel(saveTravel);
+		if (message == null || message.equalsIgnoreCase("FAIL")) {
+			return ResponseUtil.failure();
+		} else if (message.equalsIgnoreCase("Update successfully")) {
+			messageSuccess.add(message);
+			return ResponseUtil.success(messageSuccess);
+		}
+		return null;
+	}
+
 }
