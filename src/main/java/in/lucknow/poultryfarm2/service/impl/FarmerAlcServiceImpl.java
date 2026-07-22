@@ -52,8 +52,13 @@ public class FarmerAlcServiceImpl implements FarmerAlcService {
 	@Autowired
 	private TravelRepository travelRepository;
 
-	@Value("${file.upload-dir}")
-	private String uploadPath;
+//	@Value("${file.upload-dir}")
+//	private String uploadPath;
+	@Value("${file.upload-dir-mortility}")
+	private String uploadPathMortility;
+
+	@Value("${file.upload-dir-travel}")
+	private String uploadPathTravel;
 
 	@Value("${file.base-url}")
 	private String baseUrl;
@@ -365,7 +370,7 @@ public class FarmerAlcServiceImpl implements FarmerAlcService {
 
 			if (file != null && !file.isEmpty()) {
 
-				Path uploadDir = Paths.get(uploadPath);
+				Path uploadDir = Paths.get(uploadPathMortility);
 
 				if (!Files.exists(uploadDir)) {
 					Files.createDirectories(uploadDir);
@@ -543,7 +548,7 @@ public class FarmerAlcServiceImpl implements FarmerAlcService {
 
 			if (file != null && !file.isEmpty()) {
 
-				Path uploadDir = Paths.get(uploadPath);
+				Path uploadDir = Paths.get(uploadPathTravel);
 
 				if (!Files.exists(uploadDir)) {
 					Files.createDirectories(uploadDir);
@@ -642,7 +647,7 @@ public class FarmerAlcServiceImpl implements FarmerAlcService {
 			return null;
 		}
 
-		Path uploadDir = Paths.get(uploadPath);
+		Path uploadDir = Paths.get(uploadPathTravel);
 		if (!Files.exists(uploadDir)) {
 			Files.createDirectories(uploadDir);
 		}
