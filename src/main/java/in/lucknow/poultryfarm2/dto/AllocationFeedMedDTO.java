@@ -29,5 +29,5 @@ public class AllocationFeedMedDTO {
 	private String transfercharge;
 	private String againreq;
 	private String vendor;
-	private String godown;
+	// private String godown;
 }

@@ -33,7 +33,7 @@ public class AllocationFeedMedRowMapper implements RowMapper<AllocationFeedMedDT
 		dto.setTransfercharge(rs.getString("transfercharge") != null ? rs.getString("transfercharge") : "");
 		dto.setAgainreq(rs.getString("againreq"));
 		dto.setVendor(rs.getString("vendor"));
-		dto.setGodown(rs.getString("godown"));
+		// dto.setGodown(rs.getString("godown"));
 
 		return dto;
 	}

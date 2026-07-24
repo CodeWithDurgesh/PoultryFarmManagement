@@ -60,8 +60,8 @@ public class FarmerAlcServiceImpl implements FarmerAlcService {
 	@Value("${file.upload-dir-travel}")
 	private String uploadPathTravel;
 
-	@Value("${file.base-url}")
-	private String baseUrl;
+	// @Value("${file.base-url}")
+	// private String baseUrl;
 
 	private static final Logger log = LoggerFactory.getLogger(FarmerAlcServiceImpl.class);
 
@@ -402,7 +402,8 @@ public class FarmerAlcServiceImpl implements FarmerAlcService {
 				System.out.println("Saving File To---------->check----- : " + destinationPath.toAbsolutePath());
 				Files.copy(file.getInputStream(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
 				System.out.println("File Saved Successfully");
-				String imageUrl = baseUrl + "/" + fileName;
+				// String imageUrl = baseUrl + "/" + fileName;
+				String imageUrl = "/" + fileName;
 				System.out.println("Image URL :>---------------check " + imageUrl);
 				/////////// @@@@@@@@@@@@@END SERVER@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -568,7 +569,8 @@ public class FarmerAlcServiceImpl implements FarmerAlcService {
 				System.out.println("Saving File To---------->check----- : " + destinationPath.toAbsolutePath());
 				Files.copy(file.getInputStream(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
 				System.out.println("File Saved Successfully");
-				String imageUrl = baseUrl + "/" + fileName;
+				// String imageUrl = baseUrl + "/" + fileName;
+				String imageUrl = "/" + fileName;
 				System.out.println("Image URL :>---------------check " + imageUrl);
 
 				/////////// @@@@@@@@@@@@@END SERVER@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -577,15 +579,17 @@ public class FarmerAlcServiceImpl implements FarmerAlcService {
 
 //				String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
 //
-//				uploadPath = "D:/MFARM_PICs/uploads/images/travel";
+//				uploadPathTravel = "D:/MFARM_PICs/uploads/images/travel";
 //
-//				Path path = Paths.get(uploadPath, fileName);
+//				Path path = Paths.get(uploadPathTravel, fileName);
 //
 //				Files.write(path, file.getBytes());
-//				String imageUrl = baseUrl + "/" + fileName;
+//				// String imageUrl = baseUrl + "/" + fileName;
+//				String imageUrl = "/" + fileName;
 /////////// @@@@@@@@@@@@@END LOCAL@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 				// store only filename in DB
 				saveTravel.setTravelpic_open(imageUrl);
+				saveTravel.setTravelpic_close("");
 			}
 			int rowsInserted = travelRepository.saveTravel(saveTravel);
 
@@ -660,11 +664,10 @@ public class FarmerAlcServiceImpl implements FarmerAlcService {
 			extension = originalFileName.substring(originalFileName.lastIndexOf("."));
 		}
 		//// @@@@@@@@@@@START LOCAL@@@@@@@@@@@@@@@@@@@
-		// String fileName = System.currentTimeMillis() + "_" +
-		// file.getOriginalFilename();
-		// uploadPath = "D:/MFARM_PICs/uploads/images/travel";
-		// Path path = Paths.get(uploadPath, fileName);
-		// Files.write(path, file.getBytes());
+//		String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+//		uploadPathTravel = "D:/MFARM_PICs/uploads/images/travel";
+//		Path path = Paths.get(uploadPathTravel, fileName);
+//		Files.write(path, file.getBytes());
 		/////////////////// @@@@@@@@@END LOCAL@@@@@@@@@@@@@@@@@@@@@@
 
 		/////////// @@@@@@@@@@@@@START SERVER@@@@@@@@@@@@@@@@@
@@ -673,10 +676,12 @@ public class FarmerAlcServiceImpl implements FarmerAlcService {
 		System.out.println("Saving File To---------->check----- : " + destinationPath.toAbsolutePath());
 		Files.copy(file.getInputStream(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
 		System.out.println("File Updated Successfully");
-		System.out.println("Image URL :>---------------check " + baseUrl + "/" + fileName);
+		// System.out.println("Image URL :>---------------check " + baseUrl + "/" +
+		// fileName);
+		System.out.println("Image URL :>---------------check " + "/" + fileName);
 
 		/////////// @@@@@@@@@@@@@END SERVER@@@@@@@@@@@@@@@@@@@@@
-		return baseUrl + "/" + fileName;
+		return "/" + fileName;
 	}
 
 }

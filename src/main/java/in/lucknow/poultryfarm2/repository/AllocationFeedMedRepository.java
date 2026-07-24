@@ -19,7 +19,7 @@ public class AllocationFeedMedRepository {
 	@SuppressWarnings("deprecation")
 	public List<AllocationFeedMedDTO> getAllocationData(String batchNumber) {
 
-		String sql = "SELECT id,date1,invoice,branch,farmer,batch,remark,cat,product,qty,unit,rate,total,dcno,vehicleno,transferby,transfercharge,againreq,vendor,godown "
+		String sql = "SELECT id,date1,invoice,branch,farmer,batch,remark,cat,product,qty,unit,rate,total,dcno,vehicleno,transferby,transfercharge,againreq,vendor "
 				+ "FROM allocation_feed_med " + "WHERE batch = ? AND cat = ?";
 
 		return jdbcTemplate.query(sql, new Object[] { batchNumber, "Chicks" }, new AllocationFeedMedRowMapper());
